@@ -10,7 +10,7 @@ global.Promise = require('bluebird');
 var bot = new Eris(Auth.bot_token, {
     getAllUsers: true,
     messageLimit: 0,
-    maxShards: 2, 
+    maxShards: 1, 
     disableEvents: {
         TYPING_START: true,
         MESSAGE_UPDATE: true,
@@ -19,22 +19,25 @@ var bot = new Eris(Auth.bot_token, {
         VOICE_STATE_UPDATE: true
     }
 });
-var tumblr = tumblrjs.createClient(Auth.tum_token,);
+var tumblr = tumblrjs.createClient(Auth.tum_token);
 
 // tumblr.blogPosts('').then(resp => {console.log(resp.posts[0]);}).catch(err => {console.log(err);});
 
 // When bot starts set status "Playing with Luna"
 // Don't judge me
 bot.on("ready", () => {
-	console.log(bot.user.username + " is awake! [" + bot.shards.size + "]");
-	console.log("Servers:" + bot.guilds.size);
+	console.log(bot.user.username + " is awake! [" + bot.shards.size + "] S:" + bot.guilds.size + " U:" + bot.users.size);
+	console.log();
 	bot.editStatus("online",{"name":"with Luna"});
 });
 
 // https://github.com/ddlr/WishBot/blob/chryssi/index.js <- reference this
 bot.on("messageCreate", (msg) => {
 	if( !bot.ready || msg.author.bot ) return;
-	if(msg.content.includes(bot.user.mention)) bot.createMessage(msg.channel.id, "Oh, hello!");
+	if(msg.content.includes(bot.user.mention)){
+		bot.addMessageReaction(msg.channel.id, msg.id, "⚡");
+		bot.createMessage(msg.channel.id, "Oh, hello!");
+	}
 });
 
 /*
