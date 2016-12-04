@@ -27,9 +27,13 @@ var tumblr = tumblrjs.createClient(Auth.tum_token);
 // Don't judge me
 bot.on("ready", () => {
 	console.log(bot.user.username + " is awake! [" + bot.shards.size + "] S:" + bot.guilds.size + " U:" + bot.users.size);
-	console.log();
 	bot.editStatus("online",{"name":"with Luna"});
 });
+
+// Every 1 minute asynchronous
+setInterval(()=>{
+	console.log("1 minute");
+},60000);
 
 // https://github.com/ddlr/WishBot/blob/chryssi/index.js <- reference this
 bot.on("messageCreate", (msg) => {
