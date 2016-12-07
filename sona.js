@@ -31,9 +31,9 @@ bot.on("ready", () => {
 });
 
 // Every 1 minute asynchronous
-setInterval(()=>{
-	console.log("1 minute");
-},60000);
+// setInterval(()=>{
+// 	console.log("1 minute");
+// },60000);
 
 // https://github.com/ddlr/WishBot/blob/chryssi/index.js <- reference this
 bot.on("messageCreate", (msg) => {
