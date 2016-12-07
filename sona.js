@@ -2,12 +2,11 @@
 const fs = require('fs');
 const Eris = require('eris'); // https://abal.moe/Eris/docs/getting-started
 const tumblrjs = require('tumblr.js'); // https://tumblr.github.io/tumblr.js/index.html
-const Auth = require('./auth.json');
 const Config = require('./config.json');
 global.Promise = require('bluebird');
 
 // Auth stuff
-var bot = new Eris(Auth.bot_token, {
+var bot = new Eris(Config.auth.bot_token, {
     getAllUsers: true,
     messageLimit: 0,
     maxShards: 1, 
@@ -19,7 +18,7 @@ var bot = new Eris(Auth.bot_token, {
         VOICE_STATE_UPDATE: true
     }
 });
-var tumblr = tumblrjs.createClient(Auth.tum_token);
+var tumblr = tumblrjs.createClient(Config.auth.tum_token);
 
 // tumblr.blogPosts('').then(resp => {console.log(resp.posts[0]);}).catch(err => {console.log(err);});
 
