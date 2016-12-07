@@ -56,15 +56,16 @@ bot.on("messageCreate", (msg) => {
     if(msg.content.startsWith(Config.commandPrefix)){
         if(msg.content.substring(1).startsWith("tumblr")){
             var post = blog[0];
+            var stri = "Latest post on " + post.blog_name + ".tumblr.com!";
             bot.createMessage(msg.channel.id,{
-                content:"Latest post on jykinturah-art.tumblr.com!",
+                content:stri,
                 embed:{
                     title: post.blog_name,
                     description: post.summary,
-                    thumbnail: {
+                    image: {
                         url: post.photos[0].original_size.url
                     },
-                url: post.post_url
+                    url: post.post_url
                 }
             });
         }
