@@ -23,17 +23,26 @@ var tumblr = tumblrjs.createClient(Auth.tum_token);
 
 // tumblr.blogPosts('').then(resp => {console.log(resp.posts[0]);}).catch(err => {console.log(err);});
 
+// Global Vars, try keeping these few in number.
+var blog;
+
 // When bot starts set status "Playing with Luna"
 // Don't judge me
 bot.on("ready", () => {
 	console.log(bot.user.username + " is awake! [" + bot.shards.size + "] S:" + bot.guilds.size + " U:" + bot.users.size);
 	bot.editStatus("online",{"name":"with Luna"});
+    tumblr.blogPosts(Config.blogName, { type: 'photo', limit: 10 })
+        .then(resp => {blog = resp.posts;})
+        .catch(err => {console.log(err);});
 });
 
-// Every 1 minute asynchronous
-// setInterval(()=>{
-// 	console.log("1 minute");
-// },60000);
+// Every 5 minute asynchronous
+var tumblrRefresh = 5 * 60 * 1000
+setInterval(()=>{
+    tumblr.blogPosts(Config.blogName, { type: 'photo', limit: 10 })
+        .then(resp => {blog = resp.posts;})
+        .catch(err => {console.log(err);});
+},tumblrRefresh);
 
 // https://github.com/ddlr/WishBot/blob/chryssi/index.js <- reference this
 bot.on("messageCreate", (msg) => {
@@ -42,11 +51,28 @@ bot.on("messageCreate", (msg) => {
 		bot.addMessageReaction(msg.channel.id, msg.id, "⚡");
 		bot.createMessage(msg.channel.id, "Oh, hello!");
 	}
+
+    // SIMPLE IMPLEMENTATION FIRST BEFORE REAL IMPLEMENTATION
+    if(msg.content.startsWith(Config.commandPrefix)){
+        if(msg.content.substring(1).startsWith("tumblr")){
+            var post = blog[0];
+            bot.createMessage(msg.channel.id,{
+                content:"Latest post on jykinturah-art.tumblr.com!",
+                embed:{
+                    title: post.blog_name,
+                    description: post.summary,
+                    thumbnail: {
+                        url: post.photos[0].original_size.url
+                    },
+                url: post.post_url
+                }
+            });
+        }
+    }
 });
 
 bot.on("presenceUpdate", (usr) => {
     if(usr.id != Config.admin) return;
-    // console.log(usr.id,usr.game);
     if(usr.game == null) { bot.editStatus("online",{"name":"with Luna"}); }
     else{
         if(usr.game.name === "Adobe Photoshop") bot.editStatus("online",{"name":"with a tablet"});
