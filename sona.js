@@ -44,6 +44,17 @@ bot.on("messageCreate", (msg) => {
 	}
 });
 
+bot.on("presenceUpdate", (usr) => {
+    if(usr.id != Config.admin) return;
+    // console.log(usr.id,usr.game);
+    if(usr.game == null) { bot.editStatus("online",{"name":"with Luna"}); }
+    else{
+        if(usr.game.name === "Adobe Photoshop") bot.editStatus("online",{"name":"with a tablet"});
+        else if(usr.game.name === "with code") bot.editStatus("online",{"name":"find the bugs!"});
+        else bot.editStatus("online",{"name":"with Jyky"});
+    }
+});
+
 /*
 
 ## TODO ##
