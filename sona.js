@@ -54,7 +54,7 @@ var rm = (msg) => {
 
 var commands = {
     "art":{
-        descrption: "Fetch the latest art post from Jyk's artblog.",
+        description: "Fetch the latest art post from Jyk's artblog.",
         process: (bot,msg,suffix) => {
             let post = blog[0];
             let stri = "Latest post on " + post.blog_name + ".tumblr.com!";
