@@ -1,0 +1,18 @@
+{
+  "auth":{ 
+    "bot_token":"token",
+    "tum_token": {
+	  "credentials": {
+        "consumer_key": "key",
+        "consumer_secret": "secret",
+        "token": "token",
+        "token_secret": "secret"
+      },
+  	  "returnPromises": true
+    }
+  },
+  "commandPrefix": "!",
+  "cmdClr": 0,
+  "admin": "user id",
+  "blogName": "staff"
+}
