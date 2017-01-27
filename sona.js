@@ -52,6 +52,9 @@ var rm = (msg) => {
         else setTimeout(() => {msg.delete();},Config.cmdClr);
 }
 
+// check if number and int for fun, from stackoverflow
+var isInt = (n) => {return Number(n) === n && n % 1 === 0;}
+
 var commands = {
     "art":{
         description: "Fetch the latest art post from Jyk's artblog.",
@@ -85,6 +88,24 @@ var commands = {
         usage: "<message>",
         description: "Make me say something.",
         process: function(bot,msg,suffix){bot.createMessage(msg.channel.id,suffix);msg.delete();} //always delete
+    },
+    "gcd:" {
+        description: "I do maths! (gcd)",
+        usage: "<int a> <int b>",
+        process: function(bot,msg,suffix){
+            // validate stuffs
+            if(suffix.length <= 0) return;
+            var nums = suffix.split(" ");
+            if((!isInt(nums[0]) || !isInt(nums[1])) || nums[0] < 0 || nums[1] < 0) return;
+            if(nums[0] > nums[1]) {var a = nums[0]; var b = nums[1];}
+            else{var a = nums[1]; var b = nums[0];}
+            while(b > 0){
+                let temp = b;
+                b = a % b;
+                a = temp;
+            }
+            bot.createMessage(msg.channel.id,"gcd(" + nums[0] + "," + nums[1] + ") = " + a);
+        }
     },
     "uptime": {
         description: "Tells you how little sleep I have been getting.",
@@ -131,13 +152,18 @@ bot.on("messageCreate", (msg) => {
     if(msg.content.startsWith(Config.commandPrefix)){
         let cmd = msg.content.split(" ")[0].substring(1);
         var suffix = msg.content.substring(cmd.length+2);
-        var cmdobj = commands[cmd];
 
-        if(cmdobj){ //3874231
-            if(cmdobj.admin)
-                if (msg.author.id != Config.admin) bot.createMessage(msg.channel.id, "Sorry! I cannot let you do that, " + msg.author.mention);
+        if(cmd.equals("help")){
+            //placeholder
+        }else{
+            var cmdobj = commands[cmd];
+
+            if(cmdobj){ //3874231
+                if(cmdobj.admin)
+                    if (msg.author.id != Config.admin) bot.createMessage(msg.channel.id, "Sorry! I cannot let you do that, " + msg.author.mention);
+                    else cmdobj.process(bot,msg,suffix);
                 else cmdobj.process(bot,msg,suffix);
-            else cmdobj.process(bot,msg,suffix);
+            }
         }
     }
 });
